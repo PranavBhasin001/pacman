@@ -315,17 +315,13 @@ def betterEvaluationFunction(currentGameState):
     else:
         numAgents = currentGameState.getNumAgents()
         score = scoreEvaluationFunction(currentGameState)
-        food = currentGameState.getFood()
-
+        food = currentGameState.getFood().asList()
         pos = currentGameState.getPacmanPosition()
         ghostList = [util.manhattanDistance(currentGameState.getGhostPosition(i),pos) for i in range(1, numAgents)]
         foodList = [util.manhattanDistance(f, pos) for f in food]
         if min(ghostList) < 2:
             return float('-inf')
-        return score - 2 * min(foodList) - max(foodList) - 8 * currentGameState.getNumFood() + 1.5 * min(ghostList) + max(ghostList)
-
-        
-
+        return score - 2 * min(foodList) - max(foodList) - 7 * currentGameState.getNumFood() - 1 * min(ghostList) + max(ghostList)
 
     
 
