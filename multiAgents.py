@@ -164,30 +164,30 @@ class MinimaxAgent(MultiAgentSearchAgent):
                 bestAction = action
         return bestAction
 
-    def findVal(self, gameState, depth, agentIndex):
+    def findVal(self, gameState, depth, index):
         if (depth == self.depth):
             return self.evaluationFunction(gameState)
         elif (gameState.isWin() or gameState.isLose()):
             return self.evaluationFunction(gameState)
-        actions = gameState.getLegalActions(agentIndex)
+        actions = gameState.getLegalActions(index)
         totalAgents = gameState.getNumAgents()
         maximum = float("-inf")
         minimum = float('inf')
         #max-value
-        if (agentIndex == 0):
+        if (index == 0):
             for action in actions:
-                newGameState = gameState.generateSuccessor(0, action)
+                newGameState = gameState.generateSuccessor(index, action)
                 newVal = self.findVal(newGameState, depth, 1)
                 maximum = max(maximum, newVal)
             return maximum
         #min-value
         else:
             for action in actions:
-                newGameState = gameState.generateSuccessor(agentIndex, action)
-                if ((agentIndex == totalAgents - 1)):
+                newGameState = gameState.generateSuccessor(index, action)
+                if ((index == totalAgents - 1)):
                     newVal = self.findVal(newGameState, depth + 1, 0)
                 else:
-                    newVal = self.findVal(newGameState, depth, agentIndex + 1)
+                    newVal = self.findVal(newGameState, depth, index + 1)
                 minimum = min(minimum, newVal)
             return minimum
 
@@ -220,17 +220,17 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             alpha = max(alpha, maximum)
         return bestAction
 
-    def findVal(self, gameState, depth, agentIndex, alpha, beta):
+    def findVal(self, gameState, depth, index, alpha, beta):
         if (depth == self.depth):
             return self.evaluationFunction(gameState)
         elif (gameState.isWin() or gameState.isLose()):
             return self.evaluationFunction(gameState)
-        actions = gameState.getLegalActions(agentIndex)
+        actions = gameState.getLegalActions(index)
         totalAgents = gameState.getNumAgents()
         maximum = float("-inf")
         minimum = float('inf')
         #max-value
-        if (agentIndex == 0):
+        if (index == 0):
             for action in actions:
                 newGameState = gameState.generateSuccessor(0, action)
                 newVal = self.findVal(newGameState, depth, 1, alpha, beta)
@@ -244,11 +244,11 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         #min-value
         else:
             for action in actions:
-                newGameState = gameState.generateSuccessor(agentIndex, action)
-                if ((agentIndex == totalAgents - 1)):
+                newGameState = gameState.generateSuccessor(index, action)
+                if ((index == totalAgents - 1)):
                     newVal = self.findVal(newGameState, depth + 1, 0, alpha, beta)
                 else:
-                    newVal = self.findVal(newGameState, depth, agentIndex + 1, alpha, beta)
+                    newVal = self.findVal(newGameState, depth, index + 1, alpha, beta)
                 minimum = min(minimum, newVal)
                 if (minimum >= alpha):
                     #update beta: min's best option on path to root
