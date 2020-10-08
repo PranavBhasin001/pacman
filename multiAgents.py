@@ -150,7 +150,46 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        maximum = float("-inf")
+        bestAction = Directions.STOP
+        actions = gameState.getLegalActions(0);
+        return self.findBestAction(gameState, actions, maximum, bestAction)
+
+    def findBestAction(self, gameState, actions, maximum, bestAction):
+        for action in actions:
+            nextState = gameState.generateSuccessor(0, action)
+            nextVal = self.findVal(nextState, 0, 1)
+            if (maximum < nextVal):
+                maximum = nextVal
+                bestAction = action
+        return bestAction
+
+    def findVal(self, gameState, depth, agentIndex):
+        if (depth == self.depth): #leaf node will return the evaluation Function
+            return self.evaluationFunction(gameState)
+        elif (gameState.isWin() or gameState.isLose()):
+            return self.evaluationFunction(gameState)
+        actions = gameState.getLegalActions(agentIndex)
+        totalAgents = gameState.getNumAgents()
+        maximum = float("-inf")
+        minimum = float('inf')
+        if (agentIndex == 0):
+            for action in actions:
+                newGameState = gameState.generateSuccessor(0, action)
+                newVal = self.findVal(newGameState, depth, 1)
+                maximum = max(maximum, newVal)
+            return maximum
+        else:
+            for action in actions:
+                newGameState = gameState.generateSuccessor(agentIndex, action)
+                if ((agentIndex == totalAgents - 1)):
+                    newVal = self.findVal(newGameState, depth + 1, 0)
+                else:
+                    newVal = self.findVal(newGameState, depth, agentIndex + 1)
+                minimum = min(minimum, newVal)
+            return minimum
+
+
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
